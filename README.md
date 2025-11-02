@@ -169,7 +169,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👨‍💻 Author
 
-**Your Name**
+**Abdul Haseeb**
 - GitHub: [@Haseeb2510](https://github.com/Haseeb2510)
 - LinkedIn: [Abdul Haseeb](https://www.linkedin.com/in/haseeb-abdul-172542243)
 
@@ -186,4 +186,5 @@ Special thanks to:
 
 
 Grateful to the open-source ecosystem for enabling accessible, reproducible, and high-quality machine learning development.
+
 
