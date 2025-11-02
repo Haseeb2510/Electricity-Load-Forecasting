@@ -79,7 +79,7 @@ customer-churn-prediction/
 
 ## 🧹 Data Preparation & Feature Engineering
 
-![Model Comparison](reports\EDA\Electricity_Demand_Analysis.png)
+![Model Comparison](reports/EDA/Electricity_Demand_Analysis.png)
 
 
 Key preprocessing steps:
@@ -186,3 +186,4 @@ Special thanks to:
 
 
 Grateful to the open-source ecosystem for enabling accessible, reproducible, and high-quality machine learning development.
+
