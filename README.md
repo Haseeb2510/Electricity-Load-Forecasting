@@ -144,7 +144,7 @@ All visuals are available in the repository’s **`reports/`** folder and inside
 
 ```bash
 # Clone repository
-git clone <repo-link>
+git clone <https://github.com/Haseeb2510/Electricity-Load-Forecasting>
 
 # Install dependencies
 pip install -r requirements.txt
@@ -183,5 +183,6 @@ Special thanks to:
 - **PyTorch Forecasting**, **TensorFlow/Keras**, and **XGBoost** teams for developing high-performance frameworks for sequence and tree-based modeling.
 - **scikit-learn**, **Pandas**, and **NumPy** for their essential data processing, transformation, and evaluation utilities.
 - **Matplotlib** and **Seaborn** for visualization tools that made analysis and interpretation clear.
+
 
 Grateful to the open-source ecosystem for enabling accessible, reproducible, and high-quality machine learning development.
