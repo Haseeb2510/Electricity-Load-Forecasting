@@ -26,7 +26,7 @@ The goal is **not** to find a single “best” model, but to identify **which m
 ## 📁 Project Structure
 
 ```
-customer-churn-prediction/
+Electricity-Load-Forecasting/
 │
 ├── 📁 data/                        # Data directory (add your data here)
 │   ├── raw/                        # Raw data
@@ -186,5 +186,6 @@ Special thanks to:
 
 
 Grateful to the open-source ecosystem for enabling accessible, reproducible, and high-quality machine learning development.
+
 
 
