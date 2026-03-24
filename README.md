@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="media/demo.gif" alt="Demo" width="600"/>
+</p>
+
 # ⚡ Electricity Load Forecasting
 
 This project focuses on forecasting **hourly electricity demand** using multiple model families and comparing how they perform under **stable conditions** and during **regime shifts** (e.g., the COVID-19 period).  
