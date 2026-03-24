@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Electricity Load Forecasting</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .model-selector {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .model-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .model-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .model-card p {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .compare-btn {
+            background-color: #2196F3;
+        }
+        .compare-btn:hover {
+            background-color: #0b7dda;
+        }
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+        .metrics {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 3px;
+            margin: 10px 0;
+        }
+        .metrics span {
+            font-weight: bold;
+            color: #333;
+        }
+        .error {
+            color: red;
+            padding: 10px;
+            border: 1px solid red;
+            border-radius: 3px;
+            margin: 10px 0;
+        }
+        .plot {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .plot img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+        }
+        hr {
+            margin: 20px 0;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+        .comparison-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Electricity Load Forecasting System</h1>
+        <p>Select a model to generate forecasts for electricity demand.</p>
+        
+        <div class="model-selector">
+            <h2>Model Selection</h2>
+            <div class="model-grid">
+                {% for model_id, config in models.items() %}
+                <div class="model-card">
+                    <h3>{{ config.name }}</h3>
+                    <p><strong>Description:</strong> {{ config.description }}</p>
+                    <p><strong>Forecast Horizon:</strong> 24 hours</p>
+                    <form action="/predict" method="POST" style="display: inline;">
+                        <input type="hidden" name="model" value="{{ model_id }}">
+                        <button type="submit">Run {{ config.name }}</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <form action="/compare" method="POST" style="display: inline;">
+                    <button type="submit" class="compare-btn">Compare All Models</button>
+                </form>
+            </div>
+        </div>
+        
+        {% if results %}
+        <div class="results">
+            <h2>Results for {{ results.model_name }}</h2>
+            
+            <div class="metrics">
+                <h3>Performance Metrics</h3>
+                <p><span>MAE (Mean Absolute Error):</span> {{ results.metrics.MAE }}</p>
+                <p><span>RMSE (Root Mean Square Error):</span> {{ results.metrics.RMSE }}</p>
+                <p><span>MAPE (Mean Absolute Percentage Error):</span> {{ results.metrics.MAPE }}</p>
+                <p><span>Number of predictions:</span> {{ results.metrics.samples }}</p>
+            </div>
+            
+            <div class="plot">
+                <h3>Forecast Visualization</h3>
+                <img src="data:image/png;base64,{{ results.plot }}" alt="Forecast Plot">
+            </div>
+            
+            <div>
+                <h3>Recent Predictions (Last 24 hours)</h3>
+                <details>
+                    <summary>Click to view prediction values</summary>
+                    <table border="1" cellpadding="5" cellspacing="0" style="margin-top: 10px; width: 100%;">
+                        <thead>
+                            <tr><th>Hour</th><th>Actual</th><th>Predicted</th><th>Error</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for i in range(results.actual|length) %}
+                            <tr>
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ "%.2f"|format(results.actual[i]) }}</td>
+                                <td>{{ "%.2f"|format(results.predictions[i]) }}</td>
+                                <td>{{ "%.2f"|format((results.actual[i] - results.predictions[i])|abs) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </details>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if comparison %}
+        <div class="results">
+            <h2>Model Comparison</h2>
+            <div class="comparison-grid">
+                {% for model_id, data in comparison.items() %}
+                {% if data.error %}
+                <div class="comparison-card error">
+                    <h3>{{ models[model_id].name }}</h3>
+                    <p>Error: {{ data.error }}</p>
+                </div>
+                {% else %}
+                <div class="comparison-card">
+                    <h3>{{ data.name }}</h3>
+                    <div class="metrics">
+                        <p><span>MAE:</span> {{ data.metrics.MAE }}</p>
+                        <p><span>RMSE:</span> {{ data.metrics.RMSE }}</p>
+                        <p><span>MAPE:</span> {{ data.metrics.MAPE }}</p>
+                    </div>
+                    <img src="data:image/png;base64,{{ data.plot }}" alt="{{ data.name }} Plot" style="max-width: 100%;">
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if error %}
+        <div class="error">
+            <h3>Error</h3>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

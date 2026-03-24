@@ -1,4 +1,7 @@
 import os, sys
+os.environ['MPLBACKEND'] = 'TkAgg'
+import matplotlib
+matplotlib.use('TkAgg')
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 src_dir = os.path.join(current_dir, 'src')
